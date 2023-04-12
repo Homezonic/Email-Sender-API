@@ -157,8 +157,25 @@ def test_validate_email_payload():
     with pytest.raises(ValueError):
         validate_email_payload(payload)
 
+#Another Test case
+# This test case verifies that validate_email_payload raises a ValueError if there is a surplus of replacement keys not used in the html field.
+# In this case, the replacements dictionary contains an extra key age that is not used in the html field,
+# so the function should raise a ValueError with the message "Invalid replacements: age".
+def test_validate_email_payload_invalid_replacements():
+    payload = {
+        "sender_name": "John Doe",
+        "sender_addr": "john.doe@example.com",
+        "receiver_name": "Jane Smith",
+        "receiver_addr": "jane.smith@example.com",
+        "html": "Hello, {name}! Welcome to our website!",
+        "replacements": {"name": "Jane", "age": "30"}
+    }
+    with pytest.raises(ValueError) as exc_info:
+        validate_email_payload(payload)
+    assert str(exc_info.value) == "Invalid replacements: age"
 
 
 
 
 print (test_validate_email_payload())
+print (test_validate_email_payload_invalid_replacements())
